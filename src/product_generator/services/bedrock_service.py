@@ -40,5 +40,5 @@ class BedrockService:
         model_response = json.loads(response["body"].read())
 
         # Extract and print the response text.
-        response_text = model_response.get("generation", "")
+        response_text = model_response.get("generation", "")    
         return response_text
