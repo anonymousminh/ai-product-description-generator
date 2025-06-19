@@ -1,0 +1,30 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: AI Product Description Generator - Core Services
+
+Globals:
+  Function:
+    Timeout: 30 # Default timeout for all functions
+    MemorySize: 128 # Default memory for all functions
+
+Resources:
+  GenerateDescriptionLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: product_generator.lambda_handlers.generate_description_lambda.lambda_handler
+      Runtime: python3.9 # Or python3.10, python3.11, etc. (match your local Python version)
+      CodeUri: src/
+      Policies:
+        - AWSLambdaBasicExecutionRole # Grants permissions to write logs to CloudWatch
+        - Statement:
+            Effect: Allow
+            Action:
+              - bedrock:InvokeModel
+            Resource: "*" # Be more specific with Bedrock model ARNs in production
+
+Outputs:
+  GenerateDescriptionApi: # An API Gateway endpoint for your Lambda (optional for now, but good to include)
+    Description: "API Gateway endpoint URL for GenerateDescriptionLambda"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/generate/"
+    Export: 
+      Name: GenerateDescriptionApi
