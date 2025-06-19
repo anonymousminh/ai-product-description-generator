@@ -12,7 +12,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: product_generator.lambda_handlers.generate_description_lambda.lambda_handler
-      Runtime: python3.9 # Or python3.10, python3.11, etc. (match your local Python version)
+      Runtime: python3.11 # Or python3.10, python3.11, etc. (match your local Python version)
       CodeUri: src/
       Policies:
         - AWSLambdaBasicExecutionRole # Grants permissions to write logs to CloudWatch
