@@ -8,7 +8,7 @@ class BedrockService:
         self.client = boto3.client("bedrock-runtime", region_name=region)
 
     def invoke_model(self, prompt):
-        # Set the model ID, e.g., Llama 3 70b Instruct.
+        # Set the model ID for Llama 3 70b Instruct.
         model_id = "meta.llama3-3-70b-instruct-v1:0"
 
         # Embed the prompt in Llama 3's instruction format.
