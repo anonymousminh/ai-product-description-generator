@@ -39,10 +39,7 @@ def lambda_handler(event, context):
             "statusCode": 200,
             "body": json.dumps({
                 "description": generated_description
-            }),
-            "headers": {
-                "Content-Type": "application/json"
-            }
+            })
         }
     except json.JSONDecodeError:
         logger.error("Invalid JSON in request body.")
