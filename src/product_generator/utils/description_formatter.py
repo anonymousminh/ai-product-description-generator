@@ -1,5 +1,3 @@
-# src/product_generator/utils/description_formatter.py
-
 import logging
 
 logger = logging.getLogger(__name__)
