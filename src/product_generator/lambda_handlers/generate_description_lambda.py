@@ -30,7 +30,7 @@ def lambda_handler(event, context):
             f"The target audience is {audience}.\n\nAssistant:"
         )
 
-        full_generated_description = bedrock_service.invoke_claude(dynamic_prompt)
+        full_generated_description = bedrock_service.invoke_model(dynamic_prompt)
         logger.info("Full Generated Description: %s", full_generated_description)
 
         formatter = DescriptionFormatter(full_generated_description)
