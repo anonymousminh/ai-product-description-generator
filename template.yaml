@@ -22,14 +22,14 @@ Resources:
               - bedrock:InvokeModel
             Resource: "*"
       Events:
-        Api:
-          Type: Api
+        GenerateDescriptionApi:
+          Type: HttpApi
           Properties:
             Path: /generate
             Method: post
 
 Outputs:
-  GenerateDescriptionApi: # An API Gateway endpoint for your Lambda (optional for now, but good to include)
+  GenerateDescriptionApi: 
     Description: "API Gateway endpoint URL for GenerateDescriptionLambda"
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/generate/"
     Export: 
