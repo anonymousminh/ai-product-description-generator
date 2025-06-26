@@ -93,20 +93,24 @@ sam deploy --guided
 
 ### Usage
 
-- API Endpoint
+#### API Endpoint
+
 After deployment, note the API Gateway endpoint URL from the SAM output.
 
-- Example Request
-POST /generate
-```sh
+#### Example Request
+
+**POST** `/generate`
+```json
 {
   "product_name": "Eco-Friendly Water Bottle",
   "features": ["BPA-free", "Reusable", "Insulated"],
   "description_type": "detailed"
 }
 ```
-- Example Response
-```sh
+
+#### Example Response
+
+```json
 {
   "description": "Introducing the Eco-Friendly Water Bottle: BPA-free, reusable, and insulated to keep your drinks at the perfect temperature. Ideal for those who care about the environment and want a reliable hydration solution."
 }
