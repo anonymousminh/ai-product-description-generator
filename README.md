@@ -49,7 +49,6 @@ The solution leverages several AWS services:
 - **DynamoDB**: Stores generated descriptions.
 - **S3**: Archives requests and responses.
 
-![Architecture drawio-2](https://github.com/user-attachments/assets/0eaddb0f-c172-4fa7-a710-a01e08d33c70)
 
 
 
