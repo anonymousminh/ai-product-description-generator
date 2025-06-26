@@ -1,4 +1,4 @@
-# Product Description Generator
+# AI Product Description Generator
 
 [![Build Status](https://img.shields.io/github/actions/workflow/status/your-org/product-description-generator/ci.yml?branch=main)](https://github.com/your-org/product-description-generator/actions)
 [![Test Coverage](https://img.shields.io/codecov/c/github/your-org/product-description-generator/main.svg)](https://codecov.io/gh/your-org/product-description-generator)
@@ -35,8 +35,8 @@
 
 - Generate short or detailed product descriptions via API.
 - Utilizes Amazon Bedrock for high-quality AI-generated text.
-- Optional integration with DynamoDB for storing generated descriptions.
-- Optional S3 storage for archiving requests and responses.
+- Integration with DynamoDB for storing generated descriptions.
+- S3 storage for archiving requests and responses.
 - Serverless deployment using AWS Lambda and API Gateway.
 
 ## Architecture
