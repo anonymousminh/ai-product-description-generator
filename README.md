@@ -48,3 +48,6 @@ The solution leverages several AWS services:
 - **Amazon Bedrock**: Provides generative AI capabilities.
 - **DynamoDB**: Stores generated descriptions.
 - **S3**: Archives requests and responses.
+
+- ![Architecture drawio](https://github.com/user-attachments/assets/cfc6a3cf-295c-4d02-91b0-8e7152e02ee5)
+
