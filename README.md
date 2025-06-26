@@ -48,3 +48,66 @@ The solution leverages several AWS services:
 - **Amazon Bedrock**: Provides generative AI capabilities.
 - **DynamoDB**: Stores generated descriptions.
 - **S3**: Archives requests and responses.
+
+## Setup & Installation
+
+### Prerequisites
+
+- Python 3.9+
+- AWS CLI
+- AWS SAM CLI
+- Git
+
+### Cloning the Repository
+
+```sh
+git clone https://github.com/your-org/product-description-generator.git
+cd product-description-generator
+```
+
+### Setting up the Python Environment
+
+- Using venv:
+```sh
+python3 -m venv .venv
+source .venv/bin/activate
+```
+- Installing Dependencies
+```sh
+pip install -r requirements.txt
+```
+
+### AWS Configuration
+
+```sh
+aws configure
+```
+
+### Deployment
+
+- Build and deploy the application using AWS SAM:
+```sh
+sam build
+sam deploy --guided
+```
+
+### Usage
+
+- API Endpoint
+After deployment, note the API Gateway endpoint URL from the SAM output.
+
+- Example Request
+POST /generate
+```sh
+{
+  "product_name": "Eco-Friendly Water Bottle",
+  "features": ["BPA-free", "Reusable", "Insulated"],
+  "description_type": "detailed"
+}
+```
+- Example Response
+```sh
+{
+  "description": "Introducing the Eco-Friendly Water Bottle: BPA-free, reusable, and insulated to keep your drinks at the perfect temperature. Ideal for those who care about the environment and want a reliable hydration solution."
+}
+```
