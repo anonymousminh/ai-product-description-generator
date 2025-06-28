@@ -28,9 +28,55 @@ Resources:
             Path: /generate
             Method: post
 
+  ProductDescriptionsTable:
+    Type: AWS::DynamoDB::Table 
+    Properties:
+      TableName: ProductDescriptions
+      AttributeDefinitions:
+        - AttributeName: productId
+          AttributeType: S 
+        - AttributeName: formatType
+          AttributeType: S
+      KeySchema:
+        - AttributeName: productId
+          KeyType: HASH 
+        - AttributeName: formatType
+          KeyType: RANGE 
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+
+  StoreDescriptionLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: product_generator.lambda_handlers.store_description_lambda.lambda_handler
+      Runtime: python3.11
+      CodeUri: src/
+      MemorySize: 128
+      Timeout: 30
+      Environment:
+        Variables:
+          PRODUCT_DESCRIPTIONS_TABLE: !Ref ProductDescriptionsTable
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ProductDescriptionsTable
+
 Outputs:
   GenerateDescriptionApi: 
     Description: "API Gateway endpoint URL for GenerateDescriptionLambda"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/generate/"
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/generate/"
     Export: 
       Name: GenerateDescriptionApi
+
+  ProductDescriptionTableName:
+    Description: "Name of the DynamoDB table for product descriptions"
+    Value: !Ref ProductDescriptionsTable
+    Export:
+      Name: ProductDescriptionTableName
+
+  StoreDescriptionLambdaArn:
+    Description: "ARN of the StoreDescriptionLambda function"
+    Value: !GetAtt StoreDescriptionLambda.Arn
+    Export:
+      Name: StoreDescriptionLambdaArn
