@@ -20,9 +20,7 @@
   - [Example Request](#example-request)
   - [Example Response](#example-response)
 - [Testing](#testing)
-- [Project Structure](#project-structure)
 - [Contributing](#contributing)
-- [License](#license)
 - [Contact](#contact)
 
 ---
