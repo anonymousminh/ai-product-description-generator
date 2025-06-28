@@ -116,6 +116,15 @@ After deployment, note the API Gateway endpoint URL from the SAM output.
 }
 ```
 
+## Testing
 
+Run unit tests using pytest
 
+## Contributing
+
+Contributions are welcome! Please open issues or submit pull requests for improvements and bug fixes.
+
+## Contact
+
+For questions or support, contact anhminh7802@gmail.com
 
