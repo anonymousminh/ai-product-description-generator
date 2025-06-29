@@ -1,16 +1,25 @@
 import json
 import logging
+import os 
+import boto3
+
 from product_generator.services.bedrock_service import BedrockService
 from product_generator.utils.description_formatter import DescriptionFormatter
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
+# Get the ARN of the StoreDescriptionLambda from environment variables
+STORE_DESCRIPTION_LAMBDA_ARN = os.environ.get("STORE_DESCRIPTION_LAMBDA_ARN")
+
+# Initialize Lambda client outside the handler for better performance
+lambda_client = boto3.client("lambda")
+
 def lambda_handler(event, context):
     logger.info("Received event: %s", json.dumps(event))
 
     bedrock_service = BedrockService()
-
+    
     try:
         body = json.loads(event["body"])
         
@@ -18,7 +27,9 @@ def lambda_handler(event, context):
         category = body.get("category")
         features = body.get("features", [])
         audience = body.get("audience")
-        format_type = body.get("format", "detailed") # Default to detailed if not specified
+        format_type = body.get("format", "detailed")
+        # New: Check if storage is requested
+        store_result = body.get("store_result", False) # Default to False
 
         if not all([title, category, features, audience]):
             raise ValueError("Missing required product metadata: title, category, features, or audience.")
@@ -40,12 +51,39 @@ def lambda_handler(event, context):
             response_descriptions["short"] = formatter.get_short_description()
         elif format_type == "detailed":
             response_descriptions["detailed"] = formatter.get_detailed_description()
-        elif format_type == "all": # Option to generate all formats
+        elif format_type == "all":
             response_descriptions["short"] = formatter.get_short_description()
             response_descriptions["detailed"] = formatter.get_detailed_description()
-            # Add social and SEO here on Day 10
+            
         else:
             raise ValueError(f"Unsupported format type: {format_type}. Supported: short, detailed, all.")
+
+        # Asynchronously invoke StoreDescriptionLambda
+        if store_result and STORE_DESCRIPTION_LAMBDA_ARN:
+            try:
+                # Prepare payload for StoreDescriptionLambda
+                # You might want to store more metadata here
+                storage_payload = {
+                    "productId": title.replace(" ", "-").lower(), # Simple product ID for now
+                    "timestamp": context.get_remaining_time_in_millis(), # Example timestamp
+                    "metadata": {
+                        "title": title,
+                        "category": category,
+                        "features": features,
+                        "audience": audience
+                    },
+                    "descriptions": response_descriptions # Store all generated formats
+                }
+                
+                lambda_client.invoke(
+                    FunctionName=STORE_DESCRIPTION_LAMBDA_ARN,
+                    InvocationType='Event', # Asynchronous invocation
+                    Payload=json.dumps(storage_payload)
+                )
+                logger.info("Asynchronously invoked StoreDescriptionLambda.")
+            except Exception as store_e:
+                logger.error("Failed to asynchronously invoke StoreDescriptionLambda: %s", store_e)
+                
 
         return {
             'statusCode': 200,

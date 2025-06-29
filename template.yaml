@@ -27,6 +27,19 @@ Resources:
           Properties:
             Path: /generate
             Method: post
+      Environment:
+        Variables:
+          STORE_DESCRIPTION_LAMBDA_ARN: !GetAtt StoreDescriptionLambda.Arn
+          Policies:
+            - AWSLambdaBasicExecutionRole
+            - Statement:
+                Effect: Allow
+                Action:
+                  - bedrock:InvokeModel
+                Resource: "*"
+            - LambdaInvokePolicy:
+                FunctionName: !Ref StoreDescriptionLambda
+
 
   ProductDescriptionsTable:
     Type: AWS::DynamoDB::Table 
@@ -64,10 +77,10 @@ Resources:
 
 Outputs:
   GenerateDescriptionApi: 
-    Description: "API Gateway endpoint URL for GenerateDescriptionLambda"
-    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/generate/"
+    Description: "ARN of the GenerateDescriptionLambda function"
+    Value: !GetAtt GenerateDescriptionLambda.Arn
     Export: 
-      Name: GenerateDescriptionApi
+      Name: GenerateDescriptionLambdaArn
 
   ProductDescriptionTableName:
     Description: "Name of the DynamoDB table for product descriptions"
