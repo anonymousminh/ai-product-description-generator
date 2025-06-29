@@ -21,8 +21,12 @@ def lambda_handler(event, context):
     bedrock_service = BedrockService()
     
     try:
-        body = json.loads(event["body"])
-        
+        # Support both API Gateway and direct Lambda console invocation
+        if "body" in event:
+            body = json.loads(event["body"])
+        else:
+            body = event  # For direct Lambda console invocation
+
         title = body.get("title")
         category = body.get("category")
         features = body.get("features", [])
