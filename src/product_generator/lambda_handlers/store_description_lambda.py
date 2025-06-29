@@ -33,7 +33,7 @@ def lambda_handler(event, context):
         item_to_store = event["item"]
 
         # Validate required keys in item_to_store
-        required_keys = ["productId", "timestamp", "metadata", "descriptions"]
+        required_keys = ["productId", "timestamp", "metadata", "descriptions", "formatType"]
         if not all(k in item_to_store for k in required_keys):
             logger.error("Invalid item structure for storage: %s", item_to_store)
             return {
