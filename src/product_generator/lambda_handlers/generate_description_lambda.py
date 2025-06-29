@@ -66,22 +66,23 @@ def lambda_handler(event, context):
         if store_result and STORE_DESCRIPTION_LAMBDA_ARN:
             try:
                 # Prepare payload for StoreDescriptionLambda
-                # You might want to store more metadata here
-                storage_payload = {
-                    "productId": title.replace(" ", "-").lower(), # Simple product ID for now
-                    "timestamp": context.get_remaining_time_in_millis(), # Example timestamp
+                storage_item = {
+                    "productId": title.replace(" ", "-").lower(),
+                    "timestamp": context.get_remaining_time_in_millis(),
                     "metadata": {
                         "title": title,
                         "category": category,
                         "features": features,
                         "audience": audience
                     },
-                    "descriptions": response_descriptions # Store all generated formats
+                    "descriptions": response_descriptions
                 }
-                
+                # Wrap in 'item' key if that's what StoreDescriptionLambda expects
+                storage_payload = {"item": storage_item}
+
                 lambda_client.invoke(
                     FunctionName=STORE_DESCRIPTION_LAMBDA_ARN,
-                    InvocationType='Event', # Asynchronous invocation
+                    InvocationType='Event',
                     Payload=json.dumps(storage_payload)
                 )
                 logger.info("Asynchronously invoked StoreDescriptionLambda.")
