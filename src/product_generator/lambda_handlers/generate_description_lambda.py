@@ -75,7 +75,8 @@ def lambda_handler(event, context):
                         "features": features,
                         "audience": audience
                     },
-                    "descriptions": response_descriptions
+                    "descriptions": response_descriptions,
+                    "formatType": format_type
                 }
                 # Wrap in 'item' key if that's what StoreDescriptionLambda expects
                 storage_payload = {"item": storage_item}
