@@ -30,15 +30,6 @@ Resources:
       Environment:
         Variables:
           STORE_DESCRIPTION_LAMBDA_ARN: !GetAtt StoreDescriptionLambda.Arn
-          Policies:
-            - AWSLambdaBasicExecutionRole
-            - Statement:
-                Effect: Allow
-                Action:
-                  - bedrock:InvokeModel
-                Resource: "*"
-            - LambdaInvokePolicy:
-                FunctionName: !Ref StoreDescriptionLambda
 
 
   ProductDescriptionsTable:
