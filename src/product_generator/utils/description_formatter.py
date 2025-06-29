@@ -22,10 +22,30 @@ class DescriptionFormatter:
         # or apply minor formatting like ensuring paragraphs.
         return self.full_description.strip()
 
-    # Placeholder for future formats (social, SEO)
+
     def get_social_caption(self) -> str:
-        return ""
+        title = self.product_metadata.get("title", "product")
+        features = self.product_metadata.get("features", [])
+
+        caption = f"Discover the amazing {title}! "
+        if features:
+            caption += f"Featuring {features[0].lower()} and more. "
+        caption += "Get yours today! #" + title.replace(" ", "") + " #Innovation"
+
+        return caption[:280]
 
     def get_seo_rich_description(self) -> str:
-        return ""
+        title = self.product_metadata.get("title", "product") 
+        category = self.product_metadata.get("category", "category")
+        features = self.product_metadata.get("features", [])
 
+        keywords = [title.lower(), category.lower()] + [f.lower() for f in features]
+        keywords_str = ", ".join(sorted(list(set(keywords))))
+
+        seo_description = (
+            f"Buy the best {title} in the {category}. Key features include: {', '.join(features)}. "\
+            f"Experience quality and innovation with our {title}. "\
+            f"Keywords: {keywords_str}."
+        )
+
+        return seo_description[:160]
