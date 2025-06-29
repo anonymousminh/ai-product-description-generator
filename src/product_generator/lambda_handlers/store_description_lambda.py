@@ -22,17 +22,26 @@ def lambda_handler(event, context):
     dynamodb_service = DynamoDBService(PRODUCT_DESCRIPTIONS_TABLE)
 
     try:
-        # Assuming the event directly contains the item to be stored
-        # For example: {"productId": "P123", "formatType": "detailed", "description": "..."}
-        item_to_store = event # In a real scenario, you'd parse and validate this event
+        # Accepts payload in the form {"item": {...}}
+        if "item" not in event:
+            logger.error("Missing 'item' key in event: %s", event)
+            return {
+                'statusCode': 400,
+                'body': json.dumps({'message': "Payload must contain 'item' key."})
+            }
 
-        if not all(k in item_to_store for k in ["productId", "formatType", "description"]):
+        item_to_store = event["item"]
+
+        # Validate required keys in item_to_store
+        required_keys = ["productId", "timestamp", "metadata", "descriptions"]
+        if not all(k in item_to_store for k in required_keys):
             logger.error("Invalid item structure for storage: %s", item_to_store)
             return {
                 'statusCode': 400,
-                'body': json.dumps({'message': 'Invalid item structure. Requires productId, formatType, description.'})
+                'body': json.dumps({'message': f"Invalid item structure. Requires keys: {', '.join(required_keys)}."})
             }
 
+        # Store the whole item as-is
         success = dynamodb_service.put_item(item_to_store)
 
         if success:
