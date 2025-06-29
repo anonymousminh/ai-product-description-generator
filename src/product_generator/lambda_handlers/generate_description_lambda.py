@@ -32,8 +32,7 @@ def lambda_handler(event, context):
         features = body.get("features", [])
         audience = body.get("audience")
         format_type = body.get("format", "detailed")
-        # New: Check if storage is requested
-        store_result = body.get("store_result", False) # Default to False
+        store_result = body.get("store_result", False)
 
         if not all([title, category, features, audience]):
             raise ValueError("Missing required product metadata: title, category, features, or audience.")
@@ -55,9 +54,15 @@ def lambda_handler(event, context):
             response_descriptions["short"] = formatter.get_short_description()
         elif format_type == "detailed":
             response_descriptions["detailed"] = formatter.get_detailed_description()
+        elif format_type == "social":
+            response_descriptions["social"] = formatter.get_social_caption()
+        elif format_type == "seo":
+            response_descriptions["seo"] = formatter.get_seo_rich_description()
         elif format_type == "all":
             response_descriptions["short"] = formatter.get_short_description()
             response_descriptions["detailed"] = formatter.get_detailed_description()
+            response_descriptions["social"] = formatter.get_social_caption()
+            response_descriptions["seo"] = formatter.get_seo_rich_description()
             
         else:
             raise ValueError(f"Unsupported format type: {format_type}. Supported: short, detailed, all.")
