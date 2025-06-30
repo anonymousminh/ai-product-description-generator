@@ -49,10 +49,11 @@ jobs:
         run: sam build --template template.yaml --cached
 
       - name: SAM Deploy
-        run: sam deploy \
-          --stack-name ${{ env.SAM_STACK_NAME }} \
-          --region ${{ env.AWS_REGION }} \
-          --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND \
-          --no-confirm-changeset \
-          --no-fail-on-empty-changeset
+        run: |
+          sam deploy \
+            --stack-name ${{ env.SAM_STACK_NAME }} \
+            --region ${{ env.AWS_REGION }} \
+            --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND \
+            --no-confirm-changeset \
+            --no-fail-on-empty-changeset
 
