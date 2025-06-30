@@ -88,6 +88,14 @@ Resources:
             TableName: !Ref ProductDescriptionsTable
         - S3WritePolicy:
             BucketName: !Ref ProductDescriptionExportsBucketName
+      Events:
+        ExportDescriptionApi:
+          Type: HttpApi
+          Properties:
+            Path: /export-csv
+            Method: get
+            Auth:
+              ApiKeyRequired: true
 
 Outputs:
   GenerateDescriptionApi: 
@@ -119,3 +127,10 @@ Outputs:
     Value: !GetAtt ExportDescriptionLambda.Arn
     Export:
       Name: ExportDescriptionLambdaArn
+
+  ExportDescriptionApi:
+    Description: "API Gateway endpoint URL for ExportDescriptionLambda"
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/export-csv"
+    Export:
+      Name: ExportDescriptionApi
+      
