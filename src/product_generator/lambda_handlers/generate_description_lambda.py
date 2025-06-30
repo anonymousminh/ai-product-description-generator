@@ -6,6 +6,9 @@ import boto3
 from product_generator.services.bedrock_service import BedrockService
 from product_generator.utils.description_formatter import DescriptionFormatter
 
+# Set the AWS region
+os.environ["AWS_REGION"] = "us-east-2"
+
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
