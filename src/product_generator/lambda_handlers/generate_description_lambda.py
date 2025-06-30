@@ -19,7 +19,6 @@ def lambda_handler(event, context):
     logger.info("Received event: %s", json.dumps(event))
 
     bedrock_service = BedrockService()
-    lambda_client = boto3.client("lambda")
 
     try:
         # Support both API Gateway and direct Lambda console invocation
@@ -71,13 +70,13 @@ def lambda_handler(event, context):
             response_descriptions["detailed"] = formatter.get_detailed_description()
             response_descriptions["social"] = formatter.get_social_caption()
             response_descriptions["seo"] = formatter.get_seo_rich_description()
-            
         else:
             raise ValueError(f"Unsupported format type: {format_type}. Supported: short, detailed, all.")
 
         # Asynchronously invoke StoreDescriptionLambda
         if store_result and STORE_DESCRIPTION_LAMBDA_ARN:
             try:
+                lambda_client = boto3.client("lambda")  # <-- Only create here
                 # Prepare payload for StoreDescriptionLambda
                 storage_item = {
                     "productId": title.replace(" ", "-").lower(),
@@ -102,7 +101,6 @@ def lambda_handler(event, context):
                 logger.info("Asynchronously invoked StoreDescriptionLambda.")
             except Exception as store_e:
                 logger.error("Failed to asynchronously invoke StoreDescriptionLambda: %s", store_e)
-                
 
         return {
             'statusCode': 200,
