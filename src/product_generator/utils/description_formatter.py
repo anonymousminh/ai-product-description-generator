@@ -24,8 +24,8 @@ class DescriptionFormatter:
 
 
     def get_social_caption(self) -> str:
-        title = self.product_metadata.get("title", "product")
-        features = self.product_metadata.get("features", [])
+        title = self.get("title", "product")
+        features = self.get("features", [])
 
         caption = f"Discover the amazing {title}! "
         if features:
@@ -35,9 +35,9 @@ class DescriptionFormatter:
         return caption[:280]
 
     def get_seo_rich_description(self) -> str:
-        title = self.product_metadata.get("title", "product") 
-        category = self.product_metadata.get("category", "category")
-        features = self.product_metadata.get("features", [])
+        title = self.get("title", "product") 
+        category = self.get("category", "category")
+        features = self.get("features", [])
 
         keywords = [title.lower(), category.lower()] + [f.lower() for f in features]
         keywords_str = ", ".join(sorted(list(set(keywords))))
