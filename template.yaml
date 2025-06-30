@@ -19,6 +19,8 @@ Resources:
       Handler: product_generator.lambda_handlers.generate_description_lambda.lambda_handler
       Runtime: python3.11
       CodeUri: src/
+      MemorySize: 128
+      Timeout: 30
       Policies:
         - AWSLambdaBasicExecutionRole
         - Statement:
@@ -94,8 +96,24 @@ Resources:
           Properties:
             Path: /export-csv
             Method: get
-            Auth:
-              ApiKeyRequired: true
+
+  GenerateDescriptionLambdaErrorsAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: "Alarm for GenerateDescriptionLambda encounters errors"
+      AlarmName: !Sub "${AWS::StackName}-GenerateDescriptionLambda-Errors"
+      MetricName: Errors
+      Namespace: AWS/Lambda
+      Statistic: Sum
+      Period: 60
+      EvaluationPeriods: 1
+      Threshold: 0
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      Dimensions:
+        - Name: FunctionName
+          Value: !Ref GenerateDescriptionLambda
+
 
 Outputs:
   GenerateDescriptionApi: 
@@ -133,4 +151,3 @@ Outputs:
     Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/export-csv"
     Export:
       Name: ExportDescriptionApi
-      
