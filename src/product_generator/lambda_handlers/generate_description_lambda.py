@@ -47,7 +47,14 @@ def lambda_handler(event, context):
         full_generated_description = bedrock_service.invoke_model(dynamic_prompt)
         logger.info("Full Generated Description: %s", full_generated_description)
 
-        formatter = DescriptionFormatter(full_generated_description)
+        product_metadata = {
+            "title": title,
+            "category": category,
+            "features": features,
+            "audience": audience
+        }
+
+        formatter = DescriptionFormatter(full_generated_description, product_metadata)
 
         response_descriptions = {}
         if format_type == "short":

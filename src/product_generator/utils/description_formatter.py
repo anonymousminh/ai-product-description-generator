@@ -4,8 +4,9 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 class DescriptionFormatter:
-    def __init__(self, full_description: str):
+    def __init__(self, full_description: str, product_metadata: dict):
         self.full_description = full_description
+        self.product_metadata = product_metadata
 
     def get_short_description(self) -> str:
         # Simple approach: take the first sentence or a fixed number of words
@@ -24,8 +25,8 @@ class DescriptionFormatter:
 
 
     def get_social_caption(self) -> str:
-        title = self.get("title", "product")
-        features = self.get("features", [])
+        title = self.product_metadata.get("title", "product")
+        features = self.product_metadata.get("features", [])
 
         caption = f"Discover the amazing {title}! "
         if features:
@@ -35,9 +36,9 @@ class DescriptionFormatter:
         return caption[:280]
 
     def get_seo_rich_description(self) -> str:
-        title = self.get("title", "product") 
-        category = self.get("category", "category")
-        features = self.get("features", [])
+        title = self.product_metadata.get("title", "product")
+        category = self.product_metadata.get("category", "category")
+        features = self.product_metadata.get("features", [])
 
         keywords = [title.lower(), category.lower()] + [f.lower() for f in features]
         keywords_str = ", ".join(sorted(list(set(keywords))))

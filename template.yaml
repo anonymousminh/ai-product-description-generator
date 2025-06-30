@@ -7,6 +7,11 @@ Globals:
     Timeout: 30 # Default timeout for all functions
     MemorySize: 128 # Default memory for all functions
 
+Parameters:
+  ProductDescriptionExportsBucketName:
+    Type: String
+    Default: product-description-artifacts-882961643245
+
 Resources:
   GenerateDescriptionLambda:
     Type: AWS::Serverless::Function
@@ -30,7 +35,6 @@ Resources:
       Environment:
         Variables:
           STORE_DESCRIPTION_LAMBDA_ARN: !GetAtt StoreDescriptionLambda.Arn
-
 
   ProductDescriptionsTable:
     Type: AWS::DynamoDB::Table 
@@ -66,6 +70,25 @@ Resources:
         - DynamoDBCrudPolicy:
             TableName: !Ref ProductDescriptionsTable
 
+  ExportDescriptionLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: product_generator.lambda_handlers.export_description_lambda.lambda_handler
+      Runtime: python3.11
+      CodeUri: src/
+      MemorySize: 128
+      Timeout: 30
+      Environment:
+        Variables:
+          PRODUCT_DESCRIPTIONS_TABLE: !Ref ProductDescriptionsTable
+          EXPORTS_S3_BUCKET: !Ref ProductDescriptionExportsBucketName
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - DynamoDBReadPolicy:
+            TableName: !Ref ProductDescriptionsTable
+        - S3WritePolicy:
+            BucketName: !Ref ProductDescriptionExportsBucketName
+
 Outputs:
   GenerateDescriptionApi: 
     Description: "ARN of the GenerateDescriptionLambda function"
@@ -84,3 +107,15 @@ Outputs:
     Value: !GetAtt StoreDescriptionLambda.Arn
     Export:
       Name: StoreDescriptionLambdaArn
+
+  ProductDescriptionExportsBucket:
+    Description: "Name of the S3 bucket for product description exports"
+    Value: !Ref ProductDescriptionExportsBucketName
+    Export:
+      Name: ProductDescriptionExportsBucketName
+
+  ExportDescriptionLambdaArn:
+    Description: "ARN of the ExportDescriptionLambda function"
+    Value: !GetAtt ExportDescriptionLambda.Arn
+    Export:
+      Name: ExportDescriptionLambdaArn
