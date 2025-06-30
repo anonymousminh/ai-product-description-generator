@@ -57,5 +57,5 @@ jobs:
             --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND \
             --no-confirm-changeset \
             --no-fail-on-empty-changeset \
-            --s3-bucket ${{ secrets.S3_BUCKET_NAME }}
+            --s3-bucket ${{ env.S3_BUCKET_NAME }}
 
