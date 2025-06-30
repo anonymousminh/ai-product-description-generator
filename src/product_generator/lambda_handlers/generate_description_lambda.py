@@ -15,14 +15,12 @@ logger.setLevel(logging.INFO)
 # Get the ARN of the StoreDescriptionLambda from environment variables
 STORE_DESCRIPTION_LAMBDA_ARN = os.environ.get("STORE_DESCRIPTION_LAMBDA_ARN")
 
-# Initialize Lambda client outside the handler for better performance
-lambda_client = boto3.client("lambda")
-
 def lambda_handler(event, context):
     logger.info("Received event: %s", json.dumps(event))
 
     bedrock_service = BedrockService()
-    
+    lambda_client = boto3.client("lambda")
+
     try:
         # Support both API Gateway and direct Lambda console invocation
         if "body" in event:
