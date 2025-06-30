@@ -8,6 +8,7 @@ on:
 env:
   AWS_REGION: us-east-2
   SAM_STACK_NAME: product-description-generator 
+  S3_BUCKET_NAME: product-description-artifacts-882961643245
 
 jobs:
   deploy:
@@ -55,5 +56,6 @@ jobs:
             --region ${{ env.AWS_REGION }} \
             --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND \
             --no-confirm-changeset \
-            --no-fail-on-empty-changeset
+            --no-fail-on-empty-changeset \
+            --s3-bucket ${{ secrets.S3_BUCKET_NAME }}
 
