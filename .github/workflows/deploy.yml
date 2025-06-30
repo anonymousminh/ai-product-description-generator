@@ -36,7 +36,7 @@ jobs:
           pip install pytest pytest-mock
 
       - name: Run unit tests
-        run: pytest tests/
+        run: AWS_REGION=us-east-2 pytest tests/
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
