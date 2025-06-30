@@ -48,7 +48,7 @@ def lambda_handler(event, context):
         logger.info("Full Generated Description: %s", full_generated_description)
 
         formatter = DescriptionFormatter(full_generated_description)
-        
+
         response_descriptions = {}
         if format_type == "short":
             response_descriptions["short"] = formatter.get_short_description()
